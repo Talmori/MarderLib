@@ -30,7 +30,6 @@ import net.fabricmc.fabric.api.transfer.v1.storage.StoragePreconditions
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView
 import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedStorage
 import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount
-import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleViewIterator
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext
 import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant
 import net.minecraft.util.math.Direction
@@ -120,7 +119,24 @@ class FluidInventoryStorage(parts: MutableList<Part>?) : CombinedStorage<FluidVa
 			return 0
 		}
 
-		override fun iterator(transaction: TransactionContext?): MutableIterator<StorageView<FluidVariant>> = SingleViewIterator.create(this, transaction)
+		override fun iterator(): MutableIterator<StorageView<FluidVariant>> = object: MutableIterator<StorageView<FluidVariant>> {
+
+			var hasNext = true
+
+			override fun hasNext(): Boolean = hasNext
+
+			override fun next(): StorageView<FluidVariant>
+			{
+				hasNext = false
+				return this@Part
+			}
+
+			//TODO: Probably important.
+			override fun remove()
+			{
+
+			}
+		}
 
 		override fun createSnapshot(): ResourceAmount<FluidVariant>
 		{

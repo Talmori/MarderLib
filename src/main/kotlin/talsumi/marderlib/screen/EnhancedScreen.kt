@@ -65,7 +65,8 @@ abstract class EnhancedScreen<T: ScreenHandler>(handler: T, inventory: PlayerInv
         drawTexture(matrices, x, y, 0, 0, backgroundWidth, backgroundHeight)
         drawScreenElements(matrices, x, y, delta, mouseX, mouseY)
         for (widget in widgets)
-            widget.doRender(matrices, x, y, mouseX, mouseY, delta)
+            if (widget.widgetEnabled)
+                widget.doRender(matrices, x, y, mouseX, mouseY, delta)
     }
 
     override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float)
@@ -75,7 +76,7 @@ abstract class EnhancedScreen<T: ScreenHandler>(handler: T, inventory: PlayerInv
         drawMouseoverTooltip(matrices, mouseX, mouseY);
 
         for (widget in widgets)
-            if (widget.isHovered(widget.x + x, widget.y + y, mouseX, mouseY))
+            if (widget.widgetEnabled && widget.isHovered(widget.x + x, widget.y + y, mouseX, mouseY))
                 widget.renderTooltip(this, matrices, mouseX, mouseY)
     }
 
@@ -91,7 +92,7 @@ abstract class EnhancedScreen<T: ScreenHandler>(handler: T, inventory: PlayerInv
     {
         var clicked = false
         for (widget in widgets) {
-            if (widget.isHovered(widget.x + x, widget.y + y, mouseX.toInt(), mouseY.toInt())) {
+            if (widget.widgetEnabled && widget.isHovered(widget.x + x, widget.y + y, mouseX.toInt(), mouseY.toInt())) {
                 widget.onGeneralClicked(mouseX, mouseY)
                 if (button == 0)
                     widget.onLeftClicked(mouseX, mouseY)
@@ -109,7 +110,7 @@ abstract class EnhancedScreen<T: ScreenHandler>(handler: T, inventory: PlayerInv
     {
         var dragged = false
         for (widget in widgets) {
-            if (widget.isHovered(widget.x + x, widget.y + y, mouseX.toInt(), mouseY.toInt())) {
+            if (widget.widgetEnabled && widget.isHovered(widget.x + x, widget.y + y, mouseX.toInt(), mouseY.toInt())) {
                 widget.onGeneralDragged(mouseX, mouseY, deltaX, deltaY)
                 if (button == 0)
                     widget.onLeftDragged(mouseX, mouseY, deltaX, deltaY)

@@ -26,10 +26,16 @@
 
 package talsumi.marderlib
 import net.fabricmc.api.ModInitializer
+import net.minecraft.item.Item
+import net.minecraft.item.ItemGroup
+import net.minecraft.util.registry.Registry
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import talsumi.marderlib.networking.ClientPacketHandlers
 import talsumi.marderlib.networking.ServerPacketHandlers
+import talsumi.marderlib.registration.ColourMultiReg
+import talsumi.marderlib.registration.EasyRegisterableHolder
+import talsumi.marderlib.util.RegUtil
 
 @Suppress("UNUSED")
 object MarderLib: ModInitializer {
@@ -44,7 +50,16 @@ object MarderLib: ModInitializer {
 
         ServerPacketHandlers.register()
 
+        Test.regAll(Registry.ITEM, Item::class, MODID)
+
         val eTime = System.currentTimeMillis()
         LOGGER.info("MarderLib initialization complete in ${eTime-sTime} milliseconds.")
+    }
+
+    object Test: EasyRegisterableHolder<Item>() {
+
+        val item1 = reg(Item(RegUtil.itemSettings(ItemGroup.FOOD)))
+        val coloured = reg(ColourMultiReg("testitem_%s_colour") { Item(RegUtil.itemSettings(ItemGroup.FOOD)) })
+        val item2 = reg(Item(RegUtil.itemSettings(ItemGroup.FOOD)))
     }
 }

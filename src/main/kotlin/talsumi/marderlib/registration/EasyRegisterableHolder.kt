@@ -26,6 +26,7 @@ package talsumi.marderlib.registration
 
 import net.minecraft.util.Identifier
 import net.minecraft.util.registry.Registry
+import java.lang.IllegalArgumentException
 import kotlin.reflect.KClass
 import kotlin.reflect.full.findAnnotation
 import kotlin.reflect.full.memberProperties
@@ -56,6 +57,13 @@ open class EasyRegisterableHolder<T: Any> {
 		return obj
 	}
 
+	fun reg(obj: MultiReg<T, *>): MultiReg<T, *>
+	{
+		for (args in obj.getAll())
+			idMap[args.first] = id++
+		return obj
+	}
+
 	fun regAll(reg: Registry<T>, type: KClass<T>, modId: String): List<T>
 	{
 		val all = arrayOfNulls<Pair<T, String>>(id)
@@ -67,6 +75,19 @@ open class EasyRegisterableHolder<T: Any> {
 					all[idMap[obj]!!] = Pair(obj as T, prop.findAnnotation<CustomName>()?.name ?: prop.name.lowercase())
 				else
 					println("An object exists in a field that has not been registered using reg()! Modid: $modId, Type:$type, Registry:$reg")
+			}
+			else if (obj is MultiReg<*, *>) {
+				val held = obj.getAll()
+
+				if (held.size != obj.count())
+					throw IllegalArgumentException("Error while parsing MultiReg ${prop.name.lowercase()}! Returned count (${held.size}) is not equal to the amount of held objects (${obj.count()}).")
+
+				for (args in held) {
+					if (!type.isInstance(args.first))
+						throw IllegalArgumentException("Error while parsing MultiReg ${prop.name.lowercase()}! A contained object (${args.first})is not of the correct type ($type)!.")
+
+					all[idMap[args.first as T]!!] = Pair(args.first as T, args.second)
+				}
 			}
 		}
 

@@ -50,16 +50,7 @@ object MarderLib: ModInitializer {
 
         ServerPacketHandlers.register()
 
-        Test.regAll(Registry.ITEM, Item::class, MODID)
-
         val eTime = System.currentTimeMillis()
         LOGGER.info("MarderLib initialization complete in ${eTime-sTime} milliseconds.")
-    }
-
-    object Test: EasyRegisterableHolder<Item>() {
-
-        val item1 = reg(Item(RegUtil.itemSettings(ItemGroup.FOOD)))
-        val coloured = reg(ColourMultiReg("testitem_%s_colour") { Item(RegUtil.itemSettings(ItemGroup.FOOD)) })
-        val item2 = reg(Item(RegUtil.itemSettings(ItemGroup.FOOD)))
     }
 }

@@ -35,6 +35,8 @@ import talsumi.marderlib.screen.EnhancedScreen
 
 abstract class BaseWidget(x: Int, y: Int, width: Int, height: Int): ClickableWidget(x, y, width, height, Text.of("")) {
 
+    var widgetEnabled = true
+
     override fun appendNarrations(builder: NarrationMessageBuilder?) = Unit
 
     open fun renderTooltip(screen: EnhancedScreen<*>, matrices: MatrixStack, mouseX: Int, mouseY: Int)

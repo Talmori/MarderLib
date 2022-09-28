@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "marderlib",
-  "version": "1.18.2-1.0.0",
+  "version": "1.18.2-1.0.1",
   "name": "MarderLib",
   "description": "Yet another library mod that has no purpose for the end user.",
   "authors": [

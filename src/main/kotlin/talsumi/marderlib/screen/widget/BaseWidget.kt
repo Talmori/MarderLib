@@ -26,6 +26,7 @@
 
 package talsumi.marderlib.screen.widget
 
+import it.unimi.dsi.fastutil.booleans.BooleanObjectPair
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder
 import net.minecraft.client.gui.widget.ClickableWidget
 import net.minecraft.client.util.math.MatrixStack
@@ -33,7 +34,7 @@ import net.minecraft.network.PacketByteBuf
 import net.minecraft.text.Text
 import talsumi.marderlib.screen.EnhancedScreen
 
-abstract class BaseWidget(x: Int, y: Int, width: Int, height: Int): ClickableWidget(x, y, width, height, Text.of("")) {
+abstract class BaseWidget(x: Int, y: Int, width: Int, height: Int, val screen: EnhancedScreen<*>): ClickableWidget(x, y, width, height, Text.of("")) {
 
     var widgetEnabled = true
 
@@ -54,32 +55,27 @@ abstract class BaseWidget(x: Int, y: Int, width: Int, height: Int): ClickableWid
 
     }
 
-    open fun onGeneralClicked(mouseX: Double, mouseY: Double)
+    open fun onClicked(mouseX: Double, mouseY: Double, type: Button)
     {
 
     }
 
-    open fun onLeftClicked(mouseX: Double, mouseY: Double)
+    open fun onMouseReleased(mouseX: Double, mouseY: Double, type: Button)
     {
 
     }
 
-    open fun onRightClicked(mouseX: Double, mouseY: Double)
+    open fun clickedElsewhere(mouseX: Double, mouseY: Double, type: Button)
     {
 
     }
 
-    open fun onGeneralDragged(mouseX: Double, mouseY: Double, deltaX: Double, deltaY: Double)
+    open fun onDragged(mouseX: Double, mouseY: Double, deltaX: Double, deltaY: Double, type: Button)
     {
 
     }
 
-    open fun onLeftDragged(mouseX: Double, mouseY: Double, deltaX: Double, deltaY: Double)
-    {
-
-    }
-
-    open fun onRightDragged(mouseX: Double, mouseY: Double, deltaX: Double, deltaY: Double)
+    open fun keyboardPress(char: Char, keycode: Int, scancode: Int, modifiers: Int, control: Boolean, shift: Boolean, alt: Boolean)
     {
 
     }
@@ -90,4 +86,9 @@ abstract class BaseWidget(x: Int, y: Int, width: Int, height: Int): ClickableWid
     }
 
     open fun getTooltip(): List<Text>? = null
+
+    enum class Button {
+        LEFT,
+        RIGHT;
+    }
 }

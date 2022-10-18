@@ -91,16 +91,15 @@ abstract class EnhancedScreen<T: ScreenHandler>(handler: T, inventory: PlayerInv
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean
     {
         var clicked = false
-        for (widget in widgets) {
+        val type = if (button == 0) BaseWidget.Button.LEFT else BaseWidget.Button.RIGHT
+            for (widget in widgets) {
             if (widget.widgetEnabled) {
                 if (widget.isHovered(widget.x + x, widget.y + y, mouseX.toInt(), mouseY.toInt())) {
-                    widget.onGeneralClicked(mouseX, mouseY)
-                    if (button == 0)
-                        widget.onLeftClicked(mouseX, mouseY)
-                    else
-                        widget.onRightClicked(mouseX, mouseY)
-
+                    widget.onClicked(mouseX, mouseY, type)
                     clicked = true
+                }
+                else {
+                    widget.clickedElsewhere(mouseX, mouseY, type)
                 }
             }
         }
@@ -111,20 +110,26 @@ abstract class EnhancedScreen<T: ScreenHandler>(handler: T, inventory: PlayerInv
     override fun mouseDragged(mouseX: Double, mouseY: Double, button: Int, deltaX: Double, deltaY: Double): Boolean
     {
         var dragged = false
+        val type = if (button == 0) BaseWidget.Button.LEFT else BaseWidget.Button.RIGHT
         for (widget in widgets) {
             if (widget.widgetEnabled) {
                 if (widget.isHovered(widget.x + x, widget.y + y, mouseX.toInt(), mouseY.toInt())) {
-                    widget.onGeneralDragged(mouseX, mouseY, deltaX, deltaY)
-                    if (button == 0)
-                        widget.onLeftDragged(mouseX, mouseY, deltaX, deltaY)
-                    else
-                        widget.onRightDragged(mouseX, mouseY, deltaX, deltaY)
-
+                    widget.onDragged(mouseX, mouseY, deltaX, deltaY, type)
                     dragged = true
                 }
             }
         }
 
         return if (dragged) true else return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
+    }
+
+    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean
+    {
+        for (widget in widgets) {
+            if (widget.widgetEnabled) {
+                widget.keyboardPress(keyCode.toChar(), keyCode, scanCode, modifiers, modifiers and 2 > 0, modifiers and 1 > 0, modifiers and 4 > 0)
+            }
+        }
+        return super.keyPressed(keyCode, scanCode, modifiers)
     }
 }

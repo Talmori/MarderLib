@@ -26,19 +26,17 @@
 
 package talsumi.marderlib.screen.widget
 
-import it.unimi.dsi.fastutil.booleans.BooleanObjectPair
-import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder
-import net.minecraft.client.gui.widget.ClickableWidget
+import net.minecraft.client.gui.DrawableHelper
+import net.minecraft.client.gui.Element
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.text.Text
 import talsumi.marderlib.screen.EnhancedScreen
 
-abstract class BaseWidget(x: Int, y: Int, width: Int, height: Int, val screen: EnhancedScreen<*>): ClickableWidget(x, y, width, height, Text.of("")) {
+abstract class BaseWidget(var x: Int, var y: Int, var width: Int, var height: Int, val screen: EnhancedScreen<*>): Element, DrawableHelper() {
 
     var widgetEnabled = true
-
-    override fun appendNarrations(builder: NarrationMessageBuilder?) = Unit
+    var frozen = false
 
     open fun renderTooltip(screen: EnhancedScreen<*>, matrices: MatrixStack, mouseX: Int, mouseY: Int)
     {
@@ -52,20 +50,15 @@ abstract class BaseWidget(x: Int, y: Int, width: Int, height: Int, val screen: E
 
     open fun doRender(matrices: MatrixStack, x: Int, y: Int, mouseX: Int, mouseY: Int, delta: Float)
     {
-
+        
     }
 
-    open fun onClicked(mouseX: Double, mouseY: Double, type: Button)
+    open fun onMouseAction(mouseX: Double, mouseY: Double, button: Button, type: Type)
     {
 
     }
 
-    open fun onMouseReleased(mouseX: Double, mouseY: Double, type: Button)
-    {
-
-    }
-
-    open fun clickedElsewhere(mouseX: Double, mouseY: Double, type: Button)
+    open fun onMouseActionElsewhere(mouseX: Double, mouseY: Double, button: Button, type: Type)
     {
 
     }
@@ -75,7 +68,17 @@ abstract class BaseWidget(x: Int, y: Int, width: Int, height: Int, val screen: E
 
     }
 
-    open fun keyboardPress(char: Char, keycode: Int, scancode: Int, modifiers: Int, control: Boolean, shift: Boolean, alt: Boolean)
+    open fun keyPressed(keycode: Int, scancode: Int, modifiers: Int, control: Boolean, shift: Boolean, alt: Boolean)
+    {
+
+    }
+
+    open fun charPressed(char: Char, modifiers: Int, control: Boolean, shift: Boolean, alt: Boolean)
+    {
+
+    }
+
+    open fun scrolled(mouseX: Double, mouseY: Double, amount: Double, hovered: Boolean)
     {
 
     }
@@ -90,5 +93,10 @@ abstract class BaseWidget(x: Int, y: Int, width: Int, height: Int, val screen: E
     enum class Button {
         LEFT,
         RIGHT;
+    }
+
+    enum class Type {
+        PRESSED,
+        RELEASED
     }
 }

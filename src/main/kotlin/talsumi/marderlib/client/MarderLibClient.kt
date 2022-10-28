@@ -29,14 +29,14 @@ import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientBlockEntityEvents
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientEntityEvents
 import talsumi.marderlib.client.eventhandlers.ClientEventHandlers
-import talsumi.marderlib.networking.ClientPacketHandlers
+import talsumi.marderlib.networking.MarderLibClientPacketHandlers
 
 @Suppress("UNUSED")
 object MarderLibClient: ClientModInitializer {
 
     override fun onInitializeClient()
     {
-        ClientPacketHandlers.register()
+        MarderLibClientPacketHandlers.register()
         ClientEntityEvents.ENTITY_LOAD.register(ClientEventHandlers::onEntityLoad)
         ClientBlockEntityEvents.BLOCK_ENTITY_LOAD.register(ClientEventHandlers::onBlockEntityLoad)
     }

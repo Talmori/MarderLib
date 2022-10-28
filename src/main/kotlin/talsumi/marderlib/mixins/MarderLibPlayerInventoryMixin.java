@@ -11,6 +11,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import talsumi.marderlib.mixininterfaces.MarderLibItemExtendedBehaviour;
+import talsumi.marderlib.networking.MarderLibClientPacketsOut;
+import talsumi.marderlib.networking.MarderLibServerPacketsOut;
 
 @Mixin(PlayerInventory.class)
 public class MarderLibPlayerInventoryMixin {
@@ -19,11 +21,13 @@ public class MarderLibPlayerInventoryMixin {
     public void scrollInHotbar(double scrollAmount, CallbackInfo info)
     {
         var inv = (PlayerInventory)(Object) this;
-        var stack = inv.getStack(((PlayerInventory)(Object) this).selectedSlot);
+        var selectedSlot = ((PlayerInventory)(Object) this).selectedSlot;
+        var stack = inv.getStack(selectedSlot);
         if (stack.getItem() instanceof MarderLibItemExtendedBehaviour) {
             var item = (MarderLibItemExtendedBehaviour) stack.getItem();
-            if (item.onItemScrolled(stack, inv.player, inv.player.world, inv.player.isSneaking(), scrollAmount))
+            if (item.onItemScrolled(stack, inv.player, inv.player.world, true, inv.player.isSneaking(), scrollAmount))
                 info.cancel();
+            MarderLibClientPacketsOut.INSTANCE.sendScrolledItemPacket(scrollAmount, selectedSlot);
         }
     }
 }

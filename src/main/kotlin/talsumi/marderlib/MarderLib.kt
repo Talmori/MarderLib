@@ -26,16 +26,9 @@
 
 package talsumi.marderlib
 import net.fabricmc.api.ModInitializer
-import net.minecraft.item.Item
-import net.minecraft.item.ItemGroup
-import net.minecraft.util.registry.Registry
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
-import talsumi.marderlib.networking.ClientPacketHandlers
-import talsumi.marderlib.networking.ServerPacketHandlers
-import talsumi.marderlib.registration.ColourMultiReg
-import talsumi.marderlib.registration.EasyRegisterableHolder
-import talsumi.marderlib.util.RegUtil
+import talsumi.marderlib.networking.MarderLibServerPacketHandlers
 
 @Suppress("UNUSED")
 object MarderLib: ModInitializer {
@@ -48,7 +41,7 @@ object MarderLib: ModInitializer {
         val sTime = System.currentTimeMillis()
         LOGGER.info("MarderLib initializing...")
 
-        ServerPacketHandlers.register()
+        MarderLibServerPacketHandlers.register()
 
         val eTime = System.currentTimeMillis()
         LOGGER.info("MarderLib initialization complete in ${eTime-sTime} milliseconds.")

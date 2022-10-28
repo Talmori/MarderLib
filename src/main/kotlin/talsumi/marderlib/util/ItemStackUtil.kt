@@ -28,7 +28,10 @@ import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags
 import net.minecraft.entity.ItemEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.util.DyeColor
+import net.minecraft.util.Identifier
 import net.minecraft.util.math.Vec3d
+import net.minecraft.util.registry.Registry
+import net.minecraft.util.registry.RegistryKey
 import net.minecraft.world.World
 import talsumi.marderlib.storage.fluid.FluidStackHandler
 import talsumi.marderlib.storage.item.ItemStackHandler
@@ -50,6 +53,11 @@ object ItemStackUtil {
 		val ent = ItemEntity(world, pos.x, pos.y, pos.z, item)
 		ent.setPickupDelay(pickupDelay)
 		world.spawnEntity(ent)
+	}
+
+	fun loadItem(id: Identifier): ItemStack
+	{
+		return Registry.ITEM.get(RegistryKey.of(Registry.ITEM_KEY, id))?.let { ItemStack(it) } ?: ItemStack.EMPTY
 	}
 
 	/**

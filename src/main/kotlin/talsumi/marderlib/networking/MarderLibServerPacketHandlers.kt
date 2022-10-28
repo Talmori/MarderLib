@@ -33,15 +33,18 @@ import net.minecraft.server.MinecraftServer
 import net.minecraft.server.network.ServerPlayNetworkHandler
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.registry.Registry
+import talsumi.marderlib.MarderLib
 import talsumi.marderlib.content.IUpdatableBlockEntity
 import talsumi.marderlib.content.IUpdatableEntity
+import talsumi.marderlib.mixininterfaces.MarderLibItemExtendedBehaviour
 
-object ServerPacketHandlers {
+object MarderLibServerPacketHandlers {
 
     fun register()
     {
-        ServerPlayNetworking.registerGlobalReceiver(ClientPacketsOut.request_entity_update, ::receiveRequestEntityUpdatePacket)
-        ServerPlayNetworking.registerGlobalReceiver(ClientPacketsOut.request_block_entity_update, ::receiveRequestBlockEntityUpdatePacket)
+        ServerPlayNetworking.registerGlobalReceiver(MarderLibClientPacketsOut.request_entity_update, ::receiveRequestEntityUpdatePacket)
+        ServerPlayNetworking.registerGlobalReceiver(MarderLibClientPacketsOut.request_block_entity_update, ::receiveRequestBlockEntityUpdatePacket)
+        ServerPlayNetworking.registerGlobalReceiver(MarderLibClientPacketsOut.scrolled_item, ::receiveScrolledItemPacket)
     }
 
     private fun receiveRequestEntityUpdatePacket(server: MinecraftServer, player: ServerPlayerEntity, handler: ServerPlayNetworkHandler, buf: PacketByteBuf, responseSender: PacketSender)
@@ -50,7 +53,7 @@ object ServerPacketHandlers {
 
         server.execute {
             if (ent is IUpdatableEntity)
-                ServerPacketsOut.sendUpdateEntityPacket(ent, player)
+                MarderLibServerPacketsOut.sendUpdateEntityPacket(ent, player)
         }
     }
 
@@ -63,7 +66,20 @@ object ServerPacketHandlers {
             val be = player.world.getBlockEntity(pos, type).orElse(null) ?: return@execute
 
             if (be is IUpdatableBlockEntity)
-                ServerPacketsOut.sendUpdateBlockEntityPacket(be, player)
+                MarderLibServerPacketsOut.sendUpdateBlockEntityPacket(be, player)
+        }
+    }
+
+    private fun receiveScrolledItemPacket(server: MinecraftServer, player: ServerPlayerEntity, handler: ServerPlayNetworkHandler, buf: PacketByteBuf, responseSender: PacketSender)
+    {
+        val scrollAmount = buf.readDouble()
+        val selectedSlot = buf.readInt()
+
+        server.execute {
+            val stack = player.inventory.getStack(selectedSlot)
+            val item = stack.item
+            if (item is MarderLibItemExtendedBehaviour)
+                item.onItemScrolled(stack, player, player.world, false, player.isSneaking, scrollAmount)
         }
     }
 }

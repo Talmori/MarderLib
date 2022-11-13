@@ -32,7 +32,12 @@ import net.minecraft.network.PacketByteBuf
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.network.ServerPlayNetworkHandler
 import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.util.Identifier
+import net.minecraft.util.math.ChunkSectionPos
 import net.minecraft.util.registry.Registry
+import net.minecraft.util.registry.RegistryKey
+import net.minecraft.world.chunk.ChunkSection
+import talsumi.marderlib.MarderLib
 import talsumi.marderlib.content.IUpdatableBlockEntity
 import talsumi.marderlib.content.IUpdatableEntity
 
@@ -58,10 +63,16 @@ object ServerPacketHandlers {
     {
         val pos = buf.readBlockPos()
         val type = Registry.BLOCK_ENTITY_TYPE.get(buf.readIdentifier())
+        val anotherDimension = false// buf.readBoolean() //TODO: Updateable Entities/BlockEntities in other worlds.
+        val dimension = if (anotherDimension) buf.readString() else null
 
         server.execute {
-            val be = player.world.getBlockEntity(pos, type).orElse(null) ?: return@execute
+            val world = if (anotherDimension) server.getWorld(RegistryKey.of(Registry.WORLD_KEY, Identifier(dimension))) ?: return@execute else player.world
 
+            if (!world.isChunkLoaded(ChunkSectionPos.getSectionCoord(pos.x), ChunkSectionPos.getSectionCoord(pos.z)))
+                return@execute
+
+            val be = world.getBlockEntity(pos, type).orElse(null) ?: return@execute
             if (be is IUpdatableBlockEntity)
                 ServerPacketsOut.sendUpdateBlockEntityPacket(be, player)
         }

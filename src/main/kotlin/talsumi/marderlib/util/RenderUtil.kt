@@ -27,7 +27,9 @@
 package talsumi.marderlib.util
 
 import com.mojang.blaze3d.systems.RenderSystem
-import net.minecraft.client.render.Shader
+import net.minecraft.client.render.*
+import net.minecraft.client.util.math.MatrixStack
+import talsumi.marderlib.compat.MLCompatRendering
 
 object RenderUtil {
 
@@ -37,6 +39,35 @@ object RenderUtil {
             RenderSystem.getShaderTexture(0),
             RenderSystem.getShaderColor().copyOf(),
             RenderSystem.getShader())
+    }
+
+    fun unboundDrawTexture(matrices: MatrixStack, x: Float, y: Float, width: Float, height: Float, u: Int, v: Int, zOffset: Float = 0f, texWidth: Float = 256f, texHeight: Float = 256f)
+    {
+        val snap = getSnapshot()
+        matrices.push()
+
+        RenderSystem.setShader { GameRenderer.getPositionTexShader() }
+        val bufferBuilder = Tessellator.getInstance().buffer
+        val matrix = matrices.peek().positionMatrix
+
+        val xMin = x
+        val xMax = x + width
+        val yMin = y
+        val yMax = y + height
+        val uMin = u / texWidth
+        val uMax = (u + width) / texWidth
+        val vMin = v / texHeight
+        val vMax = (v + height) / texHeight
+
+        bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE)
+        bufferBuilder.vertex(matrix, xMin, yMax, zOffset).texture(uMin, vMax).next()
+        bufferBuilder.vertex(matrix, xMax, yMax, zOffset).texture(uMax, vMax).next()
+        bufferBuilder.vertex(matrix, xMax, yMin, zOffset).texture(uMax, vMin).next()
+        bufferBuilder.vertex(matrix, xMin, yMin, zOffset).texture(uMin, vMin).next()
+        MLCompatRendering.drawBuffer(bufferBuilder)
+
+        matrices.pop()
+        snap.restore()
     }
 
     class Snapshot(val tex: Int, val colour: FloatArray, val shader: Shader?) {

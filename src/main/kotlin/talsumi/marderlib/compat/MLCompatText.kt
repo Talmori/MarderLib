@@ -11,5 +11,5 @@ object MLCompatText {
 
     fun makeTranslatableText(contents: String): MutableText = Text.translatable(contents)
 
-    fun makeTranslatableText(contents: String, args: Array<Any>): MutableText = Text.translatable(contents, args)
+    fun makeTranslatableText(contents: String, args: Array<Any>): MutableText = Text.translatable(contents, *args)
 }

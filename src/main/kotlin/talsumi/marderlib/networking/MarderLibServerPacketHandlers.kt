@@ -63,6 +63,8 @@ object MarderLibServerPacketHandlers {
         val type = Registry.BLOCK_ENTITY_TYPE.get(buf.readIdentifier())
 
         server.execute {
+            if (!player.world.isChunkLoaded(pos)) return@execute
+
             val be = player.world.getBlockEntity(pos, type).orElse(null) ?: return@execute
 
             if (be is IUpdatableBlockEntity)

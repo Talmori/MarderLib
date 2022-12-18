@@ -9,7 +9,9 @@
     "MarderLibScreenHandlerAccessor",
     "MarderLibServerPlayerEntityAccessor",
     "MarderLibServerPlayerEntityAnonymous2Mixin",
-    "MarderLibServerPlayerEntityMixin"
+    "MarderLibServerPlayerEntityMixin",
+    "MarderLibPlayerEntityMixin",
+    "MarderLibPlayerInventoryMixin"
   ],
   "client": [
   ]

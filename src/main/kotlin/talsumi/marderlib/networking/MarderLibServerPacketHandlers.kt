@@ -32,21 +32,19 @@ import net.minecraft.network.PacketByteBuf
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.network.ServerPlayNetworkHandler
 import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.util.Identifier
-import net.minecraft.util.math.ChunkSectionPos
 import net.minecraft.util.registry.Registry
-import net.minecraft.util.registry.RegistryKey
-import net.minecraft.world.chunk.ChunkSection
 import talsumi.marderlib.MarderLib
 import talsumi.marderlib.content.IUpdatableBlockEntity
 import talsumi.marderlib.content.IUpdatableEntity
+import talsumi.marderlib.mixininterfaces.MarderLibItemExtendedBehaviour
 
-object ServerPacketHandlers {
+object MarderLibServerPacketHandlers {
 
     fun register()
     {
-        ServerPlayNetworking.registerGlobalReceiver(ClientPacketsOut.request_entity_update, ::receiveRequestEntityUpdatePacket)
-        ServerPlayNetworking.registerGlobalReceiver(ClientPacketsOut.request_block_entity_update, ::receiveRequestBlockEntityUpdatePacket)
+        ServerPlayNetworking.registerGlobalReceiver(MarderLibClientPacketsOut.request_entity_update, ::receiveRequestEntityUpdatePacket)
+        ServerPlayNetworking.registerGlobalReceiver(MarderLibClientPacketsOut.request_block_entity_update, ::receiveRequestBlockEntityUpdatePacket)
+        ServerPlayNetworking.registerGlobalReceiver(MarderLibClientPacketsOut.scrolled_item, ::receiveScrolledItemPacket)
     }
 
     private fun receiveRequestEntityUpdatePacket(server: MinecraftServer, player: ServerPlayerEntity, handler: ServerPlayNetworkHandler, buf: PacketByteBuf, responseSender: PacketSender)
@@ -55,7 +53,7 @@ object ServerPacketHandlers {
 
         server.execute {
             if (ent is IUpdatableEntity)
-                ServerPacketsOut.sendUpdateEntityPacket(ent, player)
+                MarderLibServerPacketsOut.sendUpdateEntityPacket(ent, player)
         }
     }
 
@@ -63,18 +61,27 @@ object ServerPacketHandlers {
     {
         val pos = buf.readBlockPos()
         val type = Registry.BLOCK_ENTITY_TYPE.get(buf.readIdentifier())
-        val anotherDimension = false// buf.readBoolean() //TODO: Updateable Entities/BlockEntities in other worlds.
-        val dimension = if (anotherDimension) buf.readString() else null
 
         server.execute {
-            val world = if (anotherDimension) server.getWorld(RegistryKey.of(Registry.WORLD_KEY, Identifier(dimension))) ?: return@execute else player.world
+            if (!player.world.isChunkLoaded(pos)) return@execute
 
-            if (!world.isChunkLoaded(ChunkSectionPos.getSectionCoord(pos.x), ChunkSectionPos.getSectionCoord(pos.z)))
-                return@execute
+            val be = player.world.getBlockEntity(pos, type).orElse(null) ?: return@execute
 
-            val be = world.getBlockEntity(pos, type).orElse(null) ?: return@execute
             if (be is IUpdatableBlockEntity)
-                ServerPacketsOut.sendUpdateBlockEntityPacket(be, player)
+                MarderLibServerPacketsOut.sendUpdateBlockEntityPacket(be, player)
+        }
+    }
+
+    private fun receiveScrolledItemPacket(server: MinecraftServer, player: ServerPlayerEntity, handler: ServerPlayNetworkHandler, buf: PacketByteBuf, responseSender: PacketSender)
+    {
+        val scrollAmount = buf.readDouble()
+        val selectedSlot = buf.readInt()
+
+        server.execute {
+            val stack = player.inventory.getStack(selectedSlot)
+            val item = stack.item
+            if (item is MarderLibItemExtendedBehaviour)
+                item.onItemScrolled(stack, player, player.world, false, player.isSneaking, scrollAmount)
         }
     }
 }

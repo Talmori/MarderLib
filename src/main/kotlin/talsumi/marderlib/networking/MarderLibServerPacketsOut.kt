@@ -37,7 +37,7 @@ import talsumi.marderlib.MarderLib
 import talsumi.marderlib.content.IUpdatableBlockEntity
 import talsumi.marderlib.content.IUpdatableEntity
 
-object ServerPacketsOut {
+object MarderLibServerPacketsOut {
 
     val update_entity = Identifier(MarderLib.MODID, "update_entity")
     val update_block_entity = Identifier(MarderLib.MODID, "update_block_entity")

@@ -35,12 +35,12 @@ import net.minecraft.util.registry.Registry
 import talsumi.marderlib.content.IUpdatableBlockEntity
 import talsumi.marderlib.content.IUpdatableEntity
 
-object ClientPacketHandlers {
+object MarderLibClientPacketHandlers {
 
     fun register()
     {
-        ClientPlayNetworking.registerGlobalReceiver(ServerPacketsOut.update_entity, ::receiveUpdateEntityPacket)
-        ClientPlayNetworking.registerGlobalReceiver(ServerPacketsOut.update_block_entity, ::receiveUpdateBlockEntityPacket)
+        ClientPlayNetworking.registerGlobalReceiver(MarderLibServerPacketsOut.update_entity, ::receiveUpdateEntityPacket)
+        ClientPlayNetworking.registerGlobalReceiver(MarderLibServerPacketsOut.update_block_entity, ::receiveUpdateBlockEntityPacket)
     }
 
     fun receiveUpdateEntityPacket(client: MinecraftClient, handler: ClientPlayNetworkHandler, buf: PacketByteBuf, responseSender: PacketSender)

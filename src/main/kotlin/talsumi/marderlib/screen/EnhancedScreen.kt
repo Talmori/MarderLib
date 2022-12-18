@@ -55,6 +55,9 @@ abstract class EnhancedScreen<T: ScreenHandler>(handler: T, inventory: PlayerInv
     fun getScreenX(): Int = x
     fun getScreenY(): Int = y
 
+    fun getScreenTrueX(): Int = (width - backgroundWidth) / 2
+    fun getScreenTrueY(): Int = (height - backgroundHeight) / 2
+
     override fun drawBackground(matrices: MatrixStack, delta: Float, mouseX: Int, mouseY: Int)
     {
         RenderSystem.setShader { GameRenderer.getPositionTexShader() }
@@ -91,36 +94,87 @@ abstract class EnhancedScreen<T: ScreenHandler>(handler: T, inventory: PlayerInv
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean
     {
         var clicked = false
-        for (widget in widgets) {
-            if (widget.widgetEnabled && widget.isHovered(widget.x + x, widget.y + y, mouseX.toInt(), mouseY.toInt())) {
-                widget.onGeneralClicked(mouseX, mouseY)
-                if (button == 0)
-                    widget.onLeftClicked(mouseX, mouseY)
-                else
-                    widget.onRightClicked(mouseX, mouseY)
-
-                clicked = true
+        val type = if (button == 0) BaseWidget.Button.LEFT else BaseWidget.Button.RIGHT
+            for (widget in widgets) {
+            if (widget.widgetEnabled && !widget.frozen) {
+                if (widget.isHovered(widget.x + x, widget.y + y, mouseX.toInt(), mouseY.toInt())) {
+                    widget.onMouseAction(mouseX, mouseY, type, BaseWidget.Type.PRESSED)
+                    clicked = true
+                }
+                else {
+                    widget.onMouseActionElsewhere(mouseX, mouseY, type, BaseWidget.Type.PRESSED)
+                }
             }
         }
 
         return if (clicked) true else super.mouseClicked(mouseX, mouseY, button)
     }
 
+    override fun mouseReleased(mouseX: Double, mouseY: Double, button: Int): Boolean
+    {
+        var clicked = false
+        val type = if (button == 0) BaseWidget.Button.LEFT else BaseWidget.Button.RIGHT
+        for (widget in widgets) {
+            if (widget.widgetEnabled && !widget.frozen) {
+                if (widget.isHovered(widget.x + x, widget.y + y, mouseX.toInt(), mouseY.toInt())) {
+                    widget.onMouseAction(mouseX, mouseY, type, BaseWidget.Type.RELEASED)
+                    clicked = true
+                }
+                else {
+                    widget.onMouseActionElsewhere(mouseX, mouseY, type, BaseWidget.Type.RELEASED)
+                }
+            }
+        }
+
+        return super.mouseReleased(mouseX, mouseY, button)
+    }
+
+    override fun charTyped(chr: Char, modifiers: Int): Boolean
+    {
+        for (widget in widgets) {
+            if (widget.widgetEnabled && !widget.frozen) {
+                widget.charPressed(chr, modifiers, modifiers and 2 > 0, modifiers and 1 > 0, modifiers and 4 > 0)
+            }
+        }
+
+        return super.charTyped(chr, modifiers)
+    }
+
     override fun mouseDragged(mouseX: Double, mouseY: Double, button: Int, deltaX: Double, deltaY: Double): Boolean
     {
         var dragged = false
+        val type = if (button == 0) BaseWidget.Button.LEFT else BaseWidget.Button.RIGHT
         for (widget in widgets) {
-            if (widget.widgetEnabled && widget.isHovered(widget.x + x, widget.y + y, mouseX.toInt(), mouseY.toInt())) {
-                widget.onGeneralDragged(mouseX, mouseY, deltaX, deltaY)
-                if (button == 0)
-                    widget.onLeftDragged(mouseX, mouseY, deltaX, deltaY)
-                else
-                    widget.onRightDragged(mouseX, mouseY, deltaX, deltaY)
-
-                dragged = true
+            if (widget.widgetEnabled && !widget.frozen) {
+                if (widget.isHovered(widget.x + x, widget.y + y, mouseX.toInt(), mouseY.toInt())) {
+                    widget.onDragged(mouseX, mouseY, deltaX, deltaY, type)
+                    dragged = true
+                }
             }
         }
 
         return if (dragged) true else return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
+    }
+
+    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean
+    {
+        for (widget in widgets) {
+            if (widget.widgetEnabled && !widget.frozen) {
+                widget.keyPressed(keyCode, scanCode, modifiers, modifiers and 2 > 0, modifiers and 1 > 0, modifiers and 4 > 0)
+            }
+        }
+
+        return super.keyPressed(keyCode, scanCode, modifiers)
+    }
+
+    override fun mouseScrolled(mouseX: Double, mouseY: Double, amount: Double): Boolean
+    {
+        for (widget in widgets) {
+            if (widget.widgetEnabled && !widget.frozen) {
+                widget.scrolled(mouseX, mouseY, amount, widget.isHovered(widget.x + x, widget.y + y, mouseX.toInt(), mouseY.toInt()))
+            }
+        }
+
+        return super.mouseScrolled(mouseX, mouseY, amount)
     }
 }

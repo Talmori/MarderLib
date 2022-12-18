@@ -28,8 +28,7 @@ package talsumi.marderlib
 import net.fabricmc.api.ModInitializer
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
-import talsumi.marderlib.networking.ClientPacketHandlers
-import talsumi.marderlib.networking.ServerPacketHandlers
+import talsumi.marderlib.networking.MarderLibServerPacketHandlers
 
 @Suppress("UNUSED")
 object MarderLib: ModInitializer {
@@ -42,7 +41,7 @@ object MarderLib: ModInitializer {
         val sTime = System.currentTimeMillis()
         LOGGER.info("MarderLib initializing...")
 
-        ServerPacketHandlers.register()
+        MarderLibServerPacketHandlers.register()
 
         val eTime = System.currentTimeMillis()
         LOGGER.info("MarderLib initialization complete in ${eTime-sTime} milliseconds.")

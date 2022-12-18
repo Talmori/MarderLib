@@ -29,6 +29,7 @@ package talsumi.marderlib.util
 import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.render.*
 import net.minecraft.client.util.math.MatrixStack
+import talsumi.marderlib.compat.MLCompatRendering
 
 object RenderUtil {
 
@@ -63,7 +64,7 @@ object RenderUtil {
         bufferBuilder.vertex(matrix, xMax, yMax, zOffset).texture(uMax, vMax).next()
         bufferBuilder.vertex(matrix, xMax, yMin, zOffset).texture(uMax, vMin).next()
         bufferBuilder.vertex(matrix, xMin, yMin, zOffset).texture(uMin, vMin).next()
-        BufferRenderer.drawWithShader(bufferBuilder.end())
+        MLCompatRendering.drawBuffer(bufferBuilder)
 
         matrices.pop()
         snap.restore()

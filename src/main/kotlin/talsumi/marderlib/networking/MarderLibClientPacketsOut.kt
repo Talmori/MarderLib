@@ -30,16 +30,18 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.entity.Entity
+import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.util.Identifier
 import net.minecraft.util.registry.Registry
 import talsumi.marderlib.MarderLib
 import talsumi.marderlib.content.IUpdatableBlockEntity
 import talsumi.marderlib.content.IUpdatableEntity
 
-object ClientPacketsOut {
+object MarderLibClientPacketsOut {
 
     val request_entity_update = Identifier(MarderLib.MODID, "request_entity_update")
     val request_block_entity_update = Identifier(MarderLib.MODID, "request_block_entity_update")
+    val scrolled_item = Identifier(MarderLib.MODID, "scrolled_item")
 
     fun <T> sendRequestEntityUpdate(entity: T) where T: IUpdatableEntity, T: Entity
     {
@@ -54,5 +56,13 @@ object ClientPacketsOut {
         buf.writeBlockPos(be.pos)
         buf.writeIdentifier(Registry.BLOCK_ENTITY_TYPE.getId(be.type))
         ClientPlayNetworking.send(request_block_entity_update, buf)
+    }
+
+    fun sendScrolledItemPacket(scrollAmount: Double, selectedSlot: Int)
+    {
+        val buf = PacketByteBufs.create()
+        buf.writeDouble(scrollAmount)
+        buf.writeInt(selectedSlot)
+        ClientPlayNetworking.send(scrolled_item, buf)
     }
 }

@@ -15,6 +15,7 @@ import talsumi.marderlib.mixininterfaces.MarderLibItemExtendedBehaviour;
 @Mixin(PlayerEntity.class)
 public class MarderLibPlayerEntityMixin {
 
+    //TODO: Reimplement this
     @Inject(at = @At(value = "HEAD"), target = @Desc(value = "dropItem", args = {ItemStack.class, boolean.class}, ret = ItemEntity.class), cancellable = true)
     public void dropItem(ItemStack stack, boolean retainOwnership, CallbackInfoReturnable info)
     {

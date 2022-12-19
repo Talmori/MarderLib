@@ -17,6 +17,7 @@ import talsumi.marderlib.networking.MarderLibServerPacketsOut;
 @Mixin(PlayerInventory.class)
 public class MarderLibPlayerInventoryMixin {
 
+    //TODO: Reimplement this
     @Inject(at = @At(value = "HEAD"), method = "scrollInHotbar", cancellable = true)
     public void scrollInHotbar(double scrollAmount, CallbackInfo info)
     {

@@ -9,7 +9,7 @@ It contains various things:
 - A (mostly) automated system for synchronizing entity & blockentity data.   (src/main/kotlin/talsumi/marderlib/content)
 - A plethora of utility classes.   (src/main/kotlin/talsumi/marderlib/util)
 - Implemented item & fluid (broken currently) inventories.   (src/main/kotlin/talsumi/marderlib/storage)
-- EzPM, a JSON ripoff mainly designed for the data generation.  (src/main/kotlin/talsumi/marderlib/easyparametermapping)
+- EzPM, a JSON ripoff mainly designed for the data generation. Not to be confused with Easy Performance Monitoring. (Yes, I should probably rename it.)  (src/main/kotlin/talsumi/marderlib/easyparametermapping)
 - Some other smaller things.
 
 Feel free to use any part of this library in your own projects. If you copy an entire class/system, attribution would be appreciated.

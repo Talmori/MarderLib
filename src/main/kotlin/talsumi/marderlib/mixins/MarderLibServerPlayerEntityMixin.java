@@ -25,6 +25,7 @@
 package talsumi.marderlib.mixins;
 
 import com.mojang.authlib.GameProfile;
+import net.minecraft.network.encryption.PlayerPublicKey;
 import net.minecraft.screen.ScreenHandlerListener;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -35,6 +36,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import talsumi.marderlib.mixininterfaces.MarderLibPlayerListenerGrabber;
 
+import javax.annotation.Nullable;
+
 
 /**
  * Combined with {@link MarderLibServerPlayerEntityAnonymous2Mixin}, allows retrieval of a {@link ServerPlayerEntity} instance from it's {@link ScreenHandlerListener}.
@@ -44,7 +47,7 @@ public class MarderLibServerPlayerEntityMixin {
 
 	@SuppressWarnings("unchecked")
 	@Inject(at = @At("TAIL"), method = "<init>")
-	private void init(MinecraftServer server, ServerWorld world, GameProfile profile, CallbackInfo info)
+	private void init(MinecraftServer server, ServerWorld world, GameProfile profile, @Nullable PlayerPublicKey publicKey, CallbackInfo info)
 	{
 		((MarderLibPlayerListenerGrabber)((MarderLibServerPlayerEntityAccessor)(Object)this).marderlib_getScreenHandlerListener()).marderlib_setOwningPlayer((ServerPlayerEntity) (Object) this);
 	}

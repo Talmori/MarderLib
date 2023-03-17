@@ -27,8 +27,8 @@
 package talsumi.marderlib.util
 
 import net.minecraft.util.math.Vec3d
-import net.minecraft.util.math.Vec3f
 import net.minecraft.util.math.Vec3i
+import org.joml.Vector3f
 
 object VectorUtil {
 
@@ -36,5 +36,5 @@ object VectorUtil {
 
     fun getVec3dInReadableFormat(vec: Vec3d): String = "${vec.x}, ${vec.y}, ${vec.z}"
 
-    fun multiply(vec: Vec3f, x: Float, y: Float, z: Float): Vec3f = Vec3f(vec.x * x, vec.y * y, vec.z * z)
+    fun multiply(vec: Vector3f, x: Float, y: Float, z: Float): Vector3f = Vector3f(vec.x * x, vec.y * y, vec.z * z)
 }

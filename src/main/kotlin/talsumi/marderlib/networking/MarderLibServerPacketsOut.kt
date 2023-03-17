@@ -30,9 +30,9 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.entity.Entity
+import net.minecraft.registry.Registries
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.Identifier
-import net.minecraft.util.registry.Registry
 import talsumi.marderlib.MarderLib
 import talsumi.marderlib.content.IUpdatableBlockEntity
 import talsumi.marderlib.content.IUpdatableEntity
@@ -54,7 +54,7 @@ object MarderLibServerPacketsOut {
     {
         val buf = PacketByteBufs.create()
         buf.writeBlockPos(be.pos)
-        buf.writeIdentifier(Registry.BLOCK_ENTITY_TYPE.getId(be.type))
+        buf.writeIdentifier(Registries.BLOCK_ENTITY_TYPE.getId(be.type))
         be.writeUpdatePacket(buf)
         ServerPlayNetworking.send(player, update_block_entity, buf)
     }

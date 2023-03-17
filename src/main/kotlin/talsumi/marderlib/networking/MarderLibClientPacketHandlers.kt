@@ -31,7 +31,7 @@ import net.fabricmc.fabric.api.networking.v1.PacketSender
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.network.ClientPlayNetworkHandler
 import net.minecraft.network.PacketByteBuf
-import net.minecraft.util.registry.Registry
+import net.minecraft.registry.Registries
 import talsumi.marderlib.content.IUpdatableBlockEntity
 import talsumi.marderlib.content.IUpdatableEntity
 
@@ -65,7 +65,7 @@ object MarderLibClientPacketHandlers {
         buf.retain()
         client.execute {
             val world = client.world
-            val be = world?.getBlockEntity(pos, Registry.BLOCK_ENTITY_TYPE.get(type))?.orElse(null) ?: return@execute
+            val be = world?.getBlockEntity(pos, Registries.BLOCK_ENTITY_TYPE.get(type))?.orElse(null) ?: return@execute
 
             if (be is IUpdatableBlockEntity)
                 be.receiveUpdatePacket(buf)

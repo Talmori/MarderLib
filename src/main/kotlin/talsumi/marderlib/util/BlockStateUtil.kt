@@ -25,13 +25,10 @@
 package talsumi.marderlib.util
 
 import net.minecraft.block.BlockState
-import net.minecraft.block.Blocks
-import net.minecraft.state.State
+import net.minecraft.registry.Registries
+import net.minecraft.registry.RegistryKey
 import net.minecraft.state.property.Property
 import net.minecraft.util.Identifier
-import net.minecraft.util.registry.Registry
-import net.minecraft.util.registry.RegistryKey
-import java.util.regex.Pattern
 
 object BlockStateUtil {
 
@@ -42,7 +39,7 @@ object BlockStateUtil {
     {
         val args = string.substring(6).lowercase().replace("}", "").replace("]", "").split("[")
 
-        val block = Registry.BLOCK.get(RegistryKey.of(Registry.BLOCK_KEY, Identifier(args[0]))) ?: return null
+        val block = Registries.BLOCK.get(RegistryKey.of(Registries.BLOCK.key, Identifier(args[0]))) ?: return null
         var state = block.defaultState
 
         //If we have no properties, return the default state

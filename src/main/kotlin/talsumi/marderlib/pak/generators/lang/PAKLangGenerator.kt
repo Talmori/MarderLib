@@ -28,7 +28,7 @@ import com.google.gson.JsonObject
 import net.minecraft.block.Block
 import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
-import net.minecraft.util.registry.Registry
+import net.minecraft.registry.Registries
 import talsumi.marderlib.easyparametermapping.EzPMBlock
 import talsumi.marderlib.pak.PAKGenerator
 import talsumi.marderlib.util.FileUtil
@@ -68,8 +68,8 @@ class PAKLangGenerator(val namespace: String): PAKGenerator {
 				parseEntry(entry.key, entry.value)
 
 		if (file.getParameterAsBoolean("autogenerate") == true) {
-			Registry.ITEM.forEach { parseItem(it) }
-			Registry.BLOCK.forEach { parseBlock(it) }
+			Registries.ITEM.forEach { parseItem(it) }
+			Registries.BLOCK.forEach { parseBlock(it) }
 		}
 
 		val json = JsonObject()

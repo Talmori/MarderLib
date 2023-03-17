@@ -27,4 +27,9 @@ abstract class MultiReg<T: Any, K: Any> {
      * Returns the amount of objects held.
      */
     abstract fun count(): Int
+
+    /**
+     * Returns an array of the contained objects. Like [getAll] but without keys.
+     */
+    abstract fun values(): Array<T>
 }

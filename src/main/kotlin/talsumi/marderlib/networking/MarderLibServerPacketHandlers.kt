@@ -29,11 +29,10 @@ package talsumi.marderlib.networking
 import net.fabricmc.fabric.api.networking.v1.PacketSender
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.minecraft.network.PacketByteBuf
+import net.minecraft.registry.Registries
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.network.ServerPlayNetworkHandler
 import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.util.registry.Registry
-import talsumi.marderlib.MarderLib
 import talsumi.marderlib.content.IUpdatableBlockEntity
 import talsumi.marderlib.content.IUpdatableEntity
 import talsumi.marderlib.mixininterfaces.MarderLibItemExtendedBehaviour
@@ -60,7 +59,7 @@ object MarderLibServerPacketHandlers {
     private fun receiveRequestBlockEntityUpdatePacket(server: MinecraftServer, player: ServerPlayerEntity, handler: ServerPlayNetworkHandler, buf: PacketByteBuf, responseSender: PacketSender)
     {
         val pos = buf.readBlockPos()
-        val type = Registry.BLOCK_ENTITY_TYPE.get(buf.readIdentifier())
+        val type = Registries.BLOCK_ENTITY_TYPE.get(buf.readIdentifier())
 
         server.execute {
             if (!player.world.isChunkLoaded(pos)) return@execute

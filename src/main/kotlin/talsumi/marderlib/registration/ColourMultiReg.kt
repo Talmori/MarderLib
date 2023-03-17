@@ -11,4 +11,5 @@ class ColourMultiReg<T: Any>(private val format: String, private val factory: (D
     override fun getAll(): Array<Pair<T, String>> = Array(16) { i -> Pair(values[i] as T, format.replace("%s", DyeColor.values()[i].name.lowercase())) }
 
     override fun count(): Int = 16
+    override fun values(): Array<T> = values as Array<T>
 }

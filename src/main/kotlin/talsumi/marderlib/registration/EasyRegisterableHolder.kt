@@ -24,8 +24,8 @@
 
 package talsumi.marderlib.registration
 
+import net.minecraft.registry.Registry
 import net.minecraft.util.Identifier
-import net.minecraft.util.registry.Registry
 import java.lang.IllegalArgumentException
 import kotlin.reflect.KClass
 import kotlin.reflect.full.findAnnotation

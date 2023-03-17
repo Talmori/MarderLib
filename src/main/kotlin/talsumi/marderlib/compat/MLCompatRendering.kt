@@ -5,13 +5,12 @@ import net.minecraft.client.render.BufferBuilder
 import net.minecraft.client.render.BufferRenderer
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory
 import net.minecraft.client.render.entity.EntityRendererFactory
-import net.minecraft.client.render.entity.EntityRendererFactory.Context
 
 object MLCompatRendering {
 
     fun drawBuffer(builder: BufferBuilder)
     {
-        BufferRenderer.drawWithShader(builder.end())
+        BufferRenderer.draw(builder.end())
     }
 
     fun makeEntityRendererContext(): EntityRendererFactory.Context

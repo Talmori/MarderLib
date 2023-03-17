@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "marderlib",
-  "version": "1.19.2-1.1.0",
+  "version": "1.19.3-1.1.1",
   "name": "MarderLib",
   "description": "Yet another library mod that has no purpose for the end user.",
   "authors": [
@@ -24,10 +24,10 @@
     "marderlib.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.14.11",
-    "fabric": ">=0.68.0",
-    "fabric-language-kotlin": ">=1.7.1+kotlin.1.6.10",
-    "minecraft": "1.19.2",
+    "fabricloader": ">=0.14.17",
+    "fabric": ">=0.76.0",
+    "fabric-language-kotlin": ">=1.8.3+kotlin.1.7.10",
+    "minecraft": "1.19.3",
     "java": ">=17"
   }
 }

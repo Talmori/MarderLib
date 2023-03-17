@@ -28,8 +28,8 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import net.minecraft.block.Block
+import net.minecraft.registry.Registries
 import net.minecraft.util.Identifier
-import net.minecraft.util.registry.Registry
 import talsumi.marderlib.easyparametermapping.EzPMBlock
 import talsumi.marderlib.pak.PAKGenerator
 import talsumi.marderlib.util.FileUtil
@@ -46,7 +46,7 @@ class PAKBlockDropGenerator(val namespace: String): PAKGenerator {
 	override fun generateFiles(file: EzPMBlock, outputFolder: File, overwrite: Boolean): Int
 	{
 		if (file.getParameterAsBoolean("autogenerate") == true)
-			Registry.BLOCK.forEach { autoGenerate(it) }
+			Registries.BLOCK.forEach { autoGenerate(it) }
 		for (entry in file.getParameterMap())
 			if (entry.key != "autogenerate")
 				parseLine(entry.key, entry.value)

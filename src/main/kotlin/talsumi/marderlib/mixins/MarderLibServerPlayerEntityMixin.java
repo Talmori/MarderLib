@@ -47,7 +47,7 @@ public class MarderLibServerPlayerEntityMixin {
 
 	@SuppressWarnings("unchecked")
 	@Inject(at = @At("TAIL"), method = "<init>")
-	private void init(MinecraftServer server, ServerWorld world, GameProfile profile, @Nullable PlayerPublicKey publicKey, CallbackInfo info)
+	private void init(MinecraftServer server, ServerWorld world, GameProfile profile, CallbackInfo info)
 	{
 		((MarderLibPlayerListenerGrabber)((MarderLibServerPlayerEntityAccessor)(Object)this).marderlib_getScreenHandlerListener()).marderlib_setOwningPlayer((ServerPlayerEntity) (Object) this);
 	}

@@ -27,11 +27,11 @@ package talsumi.marderlib.util
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags
 import net.minecraft.entity.ItemEntity
 import net.minecraft.item.ItemStack
+import net.minecraft.registry.Registries
+import net.minecraft.registry.RegistryKey
 import net.minecraft.util.DyeColor
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.Vec3d
-import net.minecraft.util.registry.Registry
-import net.minecraft.util.registry.RegistryKey
 import net.minecraft.world.World
 import talsumi.marderlib.storage.fluid.FluidStackHandler
 import talsumi.marderlib.storage.item.ItemStackHandler
@@ -57,7 +57,7 @@ object ItemStackUtil {
 
 	fun loadItem(id: Identifier): ItemStack
 	{
-		return Registry.ITEM.get(RegistryKey.of(Registry.ITEM_KEY, id))?.let { ItemStack(it) } ?: ItemStack.EMPTY
+		return Registries.ITEM.get(RegistryKey.of(Registries.ITEM.key, id))?.let { ItemStack(it) } ?: ItemStack.EMPTY
 	}
 
 	/**

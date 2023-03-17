@@ -27,6 +27,7 @@
 package talsumi.marderlib.util
 
 import com.mojang.blaze3d.systems.RenderSystem
+import net.minecraft.client.gl.ShaderProgram
 import net.minecraft.client.render.*
 import net.minecraft.client.util.math.MatrixStack
 import talsumi.marderlib.compat.MLCompatRendering
@@ -46,7 +47,7 @@ object RenderUtil {
         val snap = getSnapshot()
         matrices.push()
 
-        RenderSystem.setShader { GameRenderer.getPositionTexShader() }
+        RenderSystem.setShader(GameRenderer::getPositionTexProgram)
         val bufferBuilder = Tessellator.getInstance().buffer
         val matrix = matrices.peek().positionMatrix
 
@@ -70,7 +71,7 @@ object RenderUtil {
         snap.restore()
     }
 
-    class Snapshot(val tex: Int, val colour: FloatArray, val shader: Shader?) {
+    class Snapshot(val tex: Int, val colour: FloatArray, val shader: ShaderProgram?) {
         fun restore()
         {
             if (shader != null)

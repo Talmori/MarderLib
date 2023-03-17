@@ -28,8 +28,8 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant
 import net.minecraft.fluid.Fluid
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.network.PacketByteBuf
+import net.minecraft.registry.Registries
 import net.minecraft.util.Identifier
-import net.minecraft.util.registry.Registry
 
 
 class FluidStack(val fluid: FluidVariant, var amount: Int) {
@@ -43,7 +43,7 @@ class FluidStack(val fluid: FluidVariant, var amount: Int) {
 
 		fun fromNbt(nbt: NbtCompound): FluidStack
 		{
-			val fluidIn = Registry.FLUID[Identifier(nbt.getString("fluid"))]
+			val fluidIn = Registries.FLUID[Identifier(nbt.getString("fluid"))]
 			val data = nbt.getCompound("nbt")
 			return FluidStack(FluidVariant.of(fluidIn, if (data.isEmpty) null else data), nbt.getInt("amount"))
 		}
@@ -53,7 +53,7 @@ class FluidStack(val fluid: FluidVariant, var amount: Int) {
 			val isEmpty = buf.readBoolean()
 
 			if (!isEmpty) {
-				val fluid = Registry.FLUID.get(Identifier(buf.readString()))
+				val fluid = Registries.FLUID.get(Identifier(buf.readString()))
 				val amount = buf.readInt()
 				val nbt = buf.readNbt()
 				return FluidStack(FluidVariant.of(fluid, nbt), amount)

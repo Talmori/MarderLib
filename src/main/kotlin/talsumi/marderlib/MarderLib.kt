@@ -26,6 +26,9 @@
 
 package talsumi.marderlib
 import net.fabricmc.api.ModInitializer
+import net.minecraft.entity.ItemEntity
+import net.minecraft.entity.passive.SheepEntity
+import net.minecraft.item.Items
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import talsumi.marderlib.networking.MarderLibServerPacketHandlers

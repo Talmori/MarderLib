@@ -24,15 +24,19 @@
 
 package talsumi.marderlib.util
 
-import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings
+import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
+import net.minecraft.block.BlockState
 import net.minecraft.block.Material
+import net.minecraft.entity.EntityType
 import net.minecraft.item.ItemGroup
 import net.minecraft.sound.BlockSoundGroup
+import net.minecraft.util.math.BlockPos
+import net.minecraft.world.BlockView
 
 object RegUtil {
 
-	fun itemSettings(group: ItemGroup, maxCount: Int = 64): FabricItemSettings = FabricItemSettings().group(group).maxCount(maxCount)
+	fun itemSettings(group: ItemGroup, maxCount: Int = 64): FabricItemSettings = FabricItemSettings().maxCount(maxCount)
 
 	fun blockSettings(material: Material, hardness: Float, resistance: Float = hardness, sound: BlockSoundGroup = BlockSoundGroup.STONE, luminance: Int = 0, isTicking: Boolean = false, collidable: Boolean = true, requiresTool: Boolean = false): FabricBlockSettings
 	{
@@ -41,4 +45,20 @@ object RegUtil {
 			settings.ticksRandomly()
 		return settings
 	}
+
+	fun FabricBlockSettings.marderLibAdditionalBlockSettings(allowsSpawning: Boolean? = null, solidBlock: Boolean? = null, suffocates: Boolean? = null, blockVision: Boolean? = null, emissiveLighting: Boolean? = null): FabricBlockSettings
+	{
+		val settings = this
+		allowsSpawning?.let { settings.allowsSpawning(if (it) ::alwaysEnt else ::neverEnt) }
+		solidBlock?.let { settings.solidBlock(if (it) ::always else ::never) }
+		suffocates?.let { settings.suffocates(if (it) ::always else ::never) }
+		blockVision?.let { settings.blockVision(if (it) ::always else ::never) }
+		emissiveLighting?.let { settings.emissiveLighting(if (it) ::always else ::never) }
+		return settings
+	}
+
+	fun always(state: BlockState, world: BlockView, pos: BlockPos): Boolean = true
+	fun never(state: BlockState, world: BlockView, pos: BlockPos): Boolean = false
+	fun alwaysEnt(state: BlockState, world: BlockView, pos: BlockPos, type: EntityType<*>): Boolean = true
+	fun neverEnt(state: BlockState, world: BlockView, pos: BlockPos, type: EntityType<*>): Boolean = false
 }

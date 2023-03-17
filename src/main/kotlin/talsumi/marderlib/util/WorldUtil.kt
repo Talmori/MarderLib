@@ -24,14 +24,14 @@
 
 package talsumi.marderlib.util
 
-import net.minecraft.client.util.math.Vector3d
 import net.minecraft.entity.ItemEntity
 import net.minecraft.item.ItemStack
+import net.minecraft.util.math.Vec3d
 import net.minecraft.world.World
 
 object WorldUtil {
 
-	fun spawnStacksInWorld(world: World, pos: Vector3d, spread: Double = 0.0, vararg items: ItemStack)
+	fun spawnStacksInWorld(world: World, pos: Vec3d, spread: Double = 0.0, vararg items: ItemStack)
 	{
 		for (item in items)
 			world.spawnEntity(ItemEntity(world, pos.x+Math.random()*spread-(spread/2), pos.y+Math.random()*spread-(spread/2), pos.z+Math.random()*spread-(spread/2), item))

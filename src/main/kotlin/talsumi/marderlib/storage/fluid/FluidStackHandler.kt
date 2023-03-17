@@ -123,7 +123,7 @@ class FluidStackHandler(val tankCount: Int, vararg tankSizes: Int, val callback:
 		return (tanks[tank].fluidIn.isEmpty() || tanks[tank].fluidIn.fluid == fluid) && cachedGetTankLimitations(tank)?.allowed?.invoke(fluid) ?: true
 	}
 
-	override fun markDirty() = callback?.invoke()
+	override fun markDirty() = callback.invoke()
 
 	override fun getAvailableTanks(side: Direction?): Array<Int>
 	{

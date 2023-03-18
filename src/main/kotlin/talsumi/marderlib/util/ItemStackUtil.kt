@@ -24,7 +24,7 @@
 
 package talsumi.marderlib.util
 
-import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags
+import net.fabricmc.fabric.api.tag.FabricItemTags
 import net.minecraft.entity.ItemEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.util.DyeColor
@@ -38,7 +38,7 @@ import talsumi.marderlib.storage.item.ItemStackHandler
 
 object ItemStackUtil {
 
-	fun canAddToStack(base: ItemStack, new: ItemStack): Boolean = base.isEmpty || (base.item == new.item && base.damage == new.damage && base.nbt == new.nbt && base.count + new.count <= base.maxCount)
+	fun canAddToStack(base: ItemStack, new: ItemStack): Boolean = base.isEmpty || (base.item == new.item && base.damage == new.damage && base.tag == new.tag && base.count + new.count <= base.maxCount)
 
 	fun combineStacks(first: ItemStack, second: ItemStack): ItemStack
 	{
@@ -108,28 +108,4 @@ object ItemStackUtil {
 			}
 		}
 	}*/
-
-	fun getDyeColour(item: ItemStack): DyeColor?
-	{
-		return when {
-			item.isIn(ConventionalItemTags.WHITE_DYES) -> DyeColor.WHITE
-			item.isIn(ConventionalItemTags.ORANGE_DYES) -> DyeColor.ORANGE
-			item.isIn(ConventionalItemTags.MAGENTA_DYES) -> DyeColor.MAGENTA
-			item.isIn(ConventionalItemTags.LIGHT_BLUE_DYES) -> DyeColor.LIGHT_BLUE
-			item.isIn(ConventionalItemTags.YELLOW_DYES) -> DyeColor.YELLOW
-			item.isIn(ConventionalItemTags.LIME_DYES) -> DyeColor.LIME
-			item.isIn(ConventionalItemTags.PINK_DYES) -> DyeColor.PINK
-			item.isIn(ConventionalItemTags.GRAY_DYES) -> DyeColor.GRAY
-			item.isIn(ConventionalItemTags.LIGHT_GRAY_DYES) -> DyeColor.LIGHT_GRAY
-			item.isIn(ConventionalItemTags.CYAN_DYES) -> DyeColor.CYAN
-			item.isIn(ConventionalItemTags.PURPLE_DYES) -> DyeColor.PURPLE
-			item.isIn(ConventionalItemTags.BLUE_DYES) -> DyeColor.BLUE
-			item.isIn(ConventionalItemTags.BROWN_DYES) -> DyeColor.BROWN
-			item.isIn(ConventionalItemTags.GREEN_DYES) -> DyeColor.GREEN
-			item.isIn(ConventionalItemTags.RED_DYES) -> DyeColor.RED
-			item.isIn(ConventionalItemTags.BLACK_DYES) -> DyeColor.BLACK
-			else -> null
-		}
-	}
-
 }

@@ -45,7 +45,7 @@ object MarderLibServerPacketsOut {
     fun <T> sendUpdateEntityPacket(ent: T, player: ServerPlayerEntity) where T: IUpdatableEntity, T: Entity
     {
         val buf = PacketByteBufs.create()
-        buf.writeInt(ent.id)
+        buf.writeInt(ent.entityId)
         ent.writeUpdatePacket(buf)
         ServerPlayNetworking.send(player, update_entity, buf)
     }

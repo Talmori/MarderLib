@@ -130,7 +130,7 @@ class FluidInventoryStorage(parts: MutableList<Part>?) : CombinedStorage<FluidVa
 
 		override fun readSnapshot(snapshot: ResourceAmount<FluidVariant>)
 		{
-			inv.get()?.setFluid(tank, FluidStack(snapshot.resource, snapshot.amount.toInt()))
+			inv.get()?.setFluid(tank, FluidStack(snapshot.resource(), snapshot.amount().toInt()))
 		}
 
 		override fun isResourceBlank(): Boolean = inv.get()?.getFluid(tank)?.isEmpty() ?: true

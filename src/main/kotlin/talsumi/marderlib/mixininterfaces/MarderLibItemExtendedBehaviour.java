@@ -3,8 +3,8 @@ package talsumi.marderlib.mixininterfaces;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 
 public interface MarderLibItemExtendedBehaviour {
 
@@ -15,7 +15,7 @@ public interface MarderLibItemExtendedBehaviour {
      * @param world
      * @return
      */
-    boolean onItemDropped(@Nonnull PlayerEntity player, @Nonnull ItemStack item, @Nonnull World world);
+    boolean onItemDropped(@NotNull PlayerEntity player, @NotNull ItemStack item, @NotNull World world);
 
     /**
      * Called when a player scrolls while holding this item. Return true to cancel further operations. This is called on the server via a packet. Returning true will only have an effect clientside!
@@ -25,5 +25,5 @@ public interface MarderLibItemExtendedBehaviour {
      * @param scrollAmount
      * @return
      */
-    boolean onItemScrolled(@Nonnull ItemStack item, @Nonnull PlayerEntity player, @Nonnull World world, boolean isClient, boolean sneaking, double scrollAmount);
+    boolean onItemScrolled(@NotNull ItemStack item, @NotNull PlayerEntity player, @NotNull World world, boolean isClient, boolean sneaking, double scrollAmount);
 }

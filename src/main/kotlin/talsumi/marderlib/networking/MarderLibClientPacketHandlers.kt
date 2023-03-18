@@ -65,9 +65,9 @@ object MarderLibClientPacketHandlers {
         buf.retain()
         client.execute {
             val world = client.world
-            val be = world?.getBlockEntity(pos, Registry.BLOCK_ENTITY_TYPE.get(type))?.orElse(null) ?: return@execute
+            val be = world?.getBlockEntity(pos) ?: return@execute
 
-            if (be is IUpdatableBlockEntity)
+            if (be.type == Registry.BLOCK_ENTITY_TYPE.get(type) && be is IUpdatableBlockEntity)
                 be.receiveUpdatePacket(buf)
 
             buf.release()

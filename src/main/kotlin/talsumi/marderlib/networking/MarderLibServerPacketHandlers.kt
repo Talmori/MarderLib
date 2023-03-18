@@ -60,14 +60,13 @@ object MarderLibServerPacketHandlers {
     private fun receiveRequestBlockEntityUpdatePacket(server: MinecraftServer, player: ServerPlayerEntity, handler: ServerPlayNetworkHandler, buf: PacketByteBuf, responseSender: PacketSender)
     {
         val pos = buf.readBlockPos()
-        val type = Registry.BLOCK_ENTITY_TYPE.get(buf.readIdentifier())
+        val type = buf.readIdentifier()
 
         server.execute {
             if (!player.world.isChunkLoaded(pos)) return@execute
+            val be = player.world.getBlockEntity(pos) ?: return@execute
 
-            val be = player.world.getBlockEntity(pos, type).orElse(null) ?: return@execute
-
-            if (be is IUpdatableBlockEntity)
+            if (be.type == Registry.BLOCK_ENTITY_TYPE.get(type) && be is IUpdatableBlockEntity)
                 MarderLibServerPacketsOut.sendUpdateBlockEntityPacket(be, player)
         }
     }

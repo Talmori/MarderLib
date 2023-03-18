@@ -62,5 +62,5 @@ object FileUtil {
 		return getFileLocation(Path.of(parent.toString(), *folders).toFile(), file)
 	}
 
-	fun readJsonFile(file: File): JsonElement = JsonParser.parseString(String(Files.readAllBytes(file.toPath())))
+	fun readJsonFile(file: File): JsonElement = JsonParser().parse(String(Files.readAllBytes(file.toPath())))
 }

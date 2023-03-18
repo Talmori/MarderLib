@@ -33,22 +33,20 @@ import talsumi.marderlib.compat.MLCompatRendering
 
 object RenderUtil {
 
-    fun getSnapshot(): Snapshot
+    /*fun getSnapshot(): Snapshot
     {
         return Snapshot(
-            RenderSystem.getShaderTexture(0),
-            RenderSystem.getShaderColor().copyOf(),
+            RenderSystem.texture,
+            RenderSystem.color,
             RenderSystem.getShader())
-    }
+    }*/
 
     fun unboundDrawTexture(matrices: MatrixStack, x: Float, y: Float, width: Float, height: Float, u: Int, v: Int, zOffset: Float = 0f, texWidth: Float = 256f, texHeight: Float = 256f)
     {
-        val snap = getSnapshot()
         matrices.push()
 
-        RenderSystem.setShader { GameRenderer.getPositionTexShader() }
         val bufferBuilder = Tessellator.getInstance().buffer
-        val matrix = matrices.peek().positionMatrix
+        val matrix = matrices.peek().model
 
         val xMin = x
         val xMax = x + width
@@ -59,7 +57,8 @@ object RenderUtil {
         val vMin = v / texHeight
         val vMax = (v + height) / texHeight
 
-        bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE)
+        val drawMode = 7 //No idea where to find the constant that holds this, but I think '7' is VertexFormats.DrawMode.QUADS.
+        bufferBuilder.begin(drawMode, VertexFormats.POSITION_TEXTURE)
         bufferBuilder.vertex(matrix, xMin, yMax, zOffset).texture(uMin, vMax).next()
         bufferBuilder.vertex(matrix, xMax, yMax, zOffset).texture(uMax, vMax).next()
         bufferBuilder.vertex(matrix, xMax, yMin, zOffset).texture(uMax, vMin).next()
@@ -67,16 +66,16 @@ object RenderUtil {
         MLCompatRendering.drawBuffer(bufferBuilder)
 
         matrices.pop()
-        snap.restore()
     }
 
+    /*
     class Snapshot(val tex: Int, val colour: FloatArray, val shader: Shader?) {
         fun restore()
         {
             if (shader != null)
                 RenderSystem.setShader { shader }
-            RenderSystem.setShaderTexture(0, tex)
-            RenderSystem.setShaderColor(colour[0], colour[1], colour[2], colour[3])
+            RenderSystem.bindTexture(tex)
+            RenderSystem.color4f(colour[0], colour[1], colour[2], colour[3])
         }
-    }
+    }*/
 }

@@ -66,12 +66,12 @@ class PAKBlockDropGenerator(val namespace: String): PAKGenerator {
 
 	private fun autoGenerate(block: Block)
 	{
-		val id = block.registryEntry.registryKey().value
+		val id = Registry.BLOCK.getId(block)
 
 		if (id.namespace == namespace) {
 			val item = block.asItem()
 			if (item != null)
-				parseLine(id.toString(), item.registryEntry.registryKey().value.toString())
+				parseLine(id.toString(), Registry.ITEM.getId(item).toString())
 		}
 	}
 

@@ -1,8 +1,8 @@
 package talsumi.marderlib.screen
 
 import com.mojang.blaze3d.systems.RenderSystem
+import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.ingame.HandledScreen
-import net.minecraft.client.render.GameRenderer
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.screen.ScreenHandler
@@ -60,9 +60,8 @@ abstract class EnhancedScreen<T: ScreenHandler>(handler: T, inventory: PlayerInv
 
     override fun drawBackground(matrices: MatrixStack, delta: Float, mouseX: Int, mouseY: Int)
     {
-        RenderSystem.setShader { GameRenderer.getPositionTexShader() }
-        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f)
-        RenderSystem.setShaderTexture(0, backgroundTex)
+        RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f)
+        MinecraftClient.getInstance().textureManager.bindTexture(backgroundTex)
         val x = (width - backgroundWidth) / 2
         val y = (height - backgroundHeight) / 2
         drawTexture(matrices, x, y, 0, 0, backgroundWidth, backgroundHeight)

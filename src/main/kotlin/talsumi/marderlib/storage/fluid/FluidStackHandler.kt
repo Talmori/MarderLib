@@ -25,6 +25,7 @@
 package talsumi.marderlib.storage.fluid
 
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant
+import net.fabricmc.fabric.api.util.NbtType
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.nbt.NbtElement
 import net.minecraft.nbt.NbtList
@@ -73,7 +74,7 @@ class FluidStackHandler(val tankCount: Int, vararg tankSizes: Int, val callback:
 
 	fun load(nbt: NbtCompound)
 	{
-		val tankList = nbt.getList("tanks", NbtElement.COMPOUND_TYPE.toInt())
+		val tankList = nbt.getList("tanks", NbtType.COMPOUND)
 		for (tank in 0 until tankList.size)
 			tanks[tank].load(tankList.getCompound(tank))
 	}
@@ -123,7 +124,7 @@ class FluidStackHandler(val tankCount: Int, vararg tankSizes: Int, val callback:
 		return (tanks[tank].fluidIn.isEmpty() || tanks[tank].fluidIn.fluid == fluid) && cachedGetTankLimitations(tank)?.allowed?.invoke(fluid) ?: true
 	}
 
-	override fun markDirty() = callback?.invoke()
+	override fun markDirty() = callback.invoke()
 
 	override fun getAvailableTanks(side: Direction?): Array<Int>
 	{

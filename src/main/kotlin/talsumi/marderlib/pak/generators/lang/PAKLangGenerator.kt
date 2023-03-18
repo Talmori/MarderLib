@@ -87,7 +87,7 @@ class PAKLangGenerator(val namespace: String): PAKGenerator {
 
 	private fun parseBlock(block: Block)
 	{
-		val id = block.registryEntry.registryKey().value
+		val id = Registry.BLOCK.getId(block)
 
 		if (id.namespace == actualNamespace) {
 			val entry = "block.${id.namespace}.${id.path}"
@@ -102,7 +102,7 @@ class PAKLangGenerator(val namespace: String): PAKGenerator {
 
 	private fun parseItem(item: Item)
 	{
-		val id = item.registryEntry.registryKey().value
+		val id = Registry.ITEM.getId(item)
 
 		if (item !is BlockItem && id.namespace == actualNamespace) {
 			val entry = "item.${id.namespace}.${id.path}"

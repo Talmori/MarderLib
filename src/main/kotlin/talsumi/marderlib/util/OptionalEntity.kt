@@ -68,7 +68,7 @@ class OptionalEntity<T: Entity>(world: World?, val id: Int, val validator: (Enti
         if (world == null)
             throw IllegalStateException("World of $this is null! Ensure you call lateAddWorld before trying to access the stored Entity")
         val got = entity?.get()
-        if (got == null || got.isRemoved)
+        if (got == null || !got.isAlive)
             entity = null
     }
 

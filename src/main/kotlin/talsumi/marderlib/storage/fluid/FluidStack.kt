@@ -67,7 +67,7 @@ class FluidStack(val fluid: FluidVariant, var amount: Int) {
 	{
 		val nbt = NbtCompound()
 
-		nbt.putString("fluid", fluid.fluid.registryEntry.registryKey().value.toString())
+		nbt.putString("fluid", Registry.FLUID.getId(fluid.fluid).toString())
 		nbt.put("nbt", fluid.nbt ?: NbtCompound())
 		nbt.putInt("amount", amount)
 
@@ -79,7 +79,7 @@ class FluidStack(val fluid: FluidVariant, var amount: Int) {
 		buf.writeBoolean(isEmpty())
 
 		if (!isEmpty()) {
-			buf.writeString(fluid.fluid.registryEntry.registryKey().value.toString()) //Fluid Identifier
+			buf.writeString(Registry.FLUID.getId(fluid.fluid).toString()) //Fluid Identifier
 			buf.writeInt(amount)
 			buf.writeNbt(fluid.nbt ?: NbtCompound())
 		}

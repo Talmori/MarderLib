@@ -36,7 +36,7 @@ import net.minecraft.world.BlockView
 
 object RegUtil {
 
-	fun itemSettings(group: ItemGroup, maxCount: Int = 64): FabricItemSettings = FabricItemSettings().maxCount(maxCount)
+	fun itemSettings(maxCount: Int = 64): FabricItemSettings = FabricItemSettings().maxCount(maxCount)
 
 	fun blockSettings(material: Material, hardness: Float, resistance: Float = hardness, sound: BlockSoundGroup = BlockSoundGroup.STONE, luminance: Int = 0, isTicking: Boolean = false, collidable: Boolean = true, requiresTool: Boolean = false): FabricBlockSettings
 	{
